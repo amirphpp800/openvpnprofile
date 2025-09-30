@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OVPN Config Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: radial-gradient(ellipse at top, #181818, #0e0e0f) fixed;
+      color: #eaeaea;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+    .container {
+      max-width: 520px;
+      width: 100%;
+      margin: auto;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 22px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
+      box-sizing: border-box;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    label {
+      display: block;
+      margin: 10px 0 6px;
+      font-weight: 600;
+      color: #f0f0f0;
+    }
+    select, input {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      box-sizing: border-box;
+      background: rgba(255,255,255,0.06);
+      color: #ffffff;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    select:focus, input:focus {
+      border-color: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.09);
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+    .row > * { flex: 1; }
+    .password-wrap {
+      position: relative;
+    }
+    .show-pass {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: #ddd;
+      cursor: pointer;
+      user-select: none;
+    }
+    button {
+      padding: 12px 16px;
+      margin: 6px 0;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+      color: #ffffff;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+      transition: background 0.2s ease, transform 0.05s ease;
+    }
+    button:hover {
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.07));
+    }
+    button:active { transform: translateY(1px); }
+    #message {
+      text-align: center;
+      margin-top: 10px;
+      color: #4cd964;
+      font-weight: bold;
+    }
+    #qrcode-wrapper {
+      text-align: center;
+      margin-top: 30px;
+      flex-shrink: 0;
+    }
+    #qrcode {
+      display: inline-block;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px);
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 16px;
+      }
+      #qrcode img {
+        width: 140px !important;
+        height: 140px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>OVPN Config Generator</h2>
+  <div class="container">
+    <label for="server">Select Country:</label>
+    <select id="server">
+      <option value="ar.lazerpenguin.com">Argentina</option>
+      <option value="au.lazerpenguin.com">Australia</option>
+      <option value="at.lazerpenguin.com">Austria</option>
+      <option value="be.lazerpenguin.com">Belgium</option>
+      <option value="br.lazerpenguin.com">Brazil</option>
+      <option value="bg.lazerpenguin.com">Bulgaria</option>
+      <option value="ca.lazerpenguin.com">Canada</option>
+      <option value="cl.lazerpenguin.com">Chile</option>
+      <option value="co.lazerpenguin.com">Colombia</option>
+      <option value="cy.lazerpenguin.com">Cyprus</option>
+      <option value="cz.lazerpenguin.com">Czech Republic</option>
+      <option value="dk.lazerpenguin.com">Denmark</option>
+      <option value="fi.lazerpenguin.com">Finland</option>
+      <option value="fr.lazerpenguin.com">France</option>
+      <option value="de.lazerpenguin.com">Germany</option>
+      <option value="gr.lazerpenguin.com">Greece</option>
+      <option value="hu.lazerpenguin.com">Hungary</option>
+      <option value="id.lazerpenguin.com">Indonesia</option>
+      <option value="ie.lazerpenguin.com">Ireland</option>
+      <option value="it.lazerpenguin.com">Italy</option>
+      <option value="jp.lazerpenguin.com">Japan</option>
+      <option value="ke.lazerpenguin.com">Kenya</option>
+      <option value="lv.lazerpenguin.com">Latvia</option>
+      <option value="lt.lazerpenguin.com">Lithuania</option>
+      <option value="my.lazerpenguin.com">Malaysia</option>
+      <option value="mx.lazerpenguin.com">Mexico</option>
+      <option value="md.lazerpenguin.com">Moldova</option>
+      <option value="nl.lazerpenguin.com">Netherlands</option>
+      <option value="nz.lazerpenguin.com">New Zealand</option>
+      <option value="ng.lazerpenguin.com">Nigeria</option>
+      <option value="no.lazerpenguin.com">Norway</option>
+      <option value="pe.lazerpenguin.com">Peru</option>
+      <option value="ph.lazerpenguin.com">Philippines</option>
+      <option value="pl.lazerpenguin.com">Poland</option>
+      <option value="pt.lazerpenguin.com">Portugal</option>
+      <option value="ro.lazerpenguin.com">Romania</option>
+      <option value="rs.lazerpenguin.com">Serbia</option>
+      <option value="sg.lazerpenguin.com">Singapore</option>
+      <option value="si.lazerpenguin.com">Slovenia</option>
+      <option value="za.lazerpenguin.com">South Africa</option>
+      <option value="kr.lazerpenguin.com">South Korea</option>
+      <option value="es.lazerpenguin.com">Spain</option>
+      <option value="se.lazerpenguin.com">Sweden</option>
+      <option value="ch.lazerpenguin.com">Switzerland</option>
+      <option value="tw.lazerpenguin.com">Taiwan</option>
+      <option value="uk.lazerpenguin.com">UK</option>
+      <option value="us.lazerpenguin.com">USA</option>
+    </select>
+
+    <label for="verb">Verb:</label>
+    <input type="number" id="verb" value="5">
+
+    <label for="dns1">DNS 1:</label>
+    <input type="text" id="dns1" value="8.8.8.8">
+
+    <label for="dns2">DNS 2:</label>
+    <input type="text" id="dns2" value="8.8.4.4">
+
+    <label for="username">یوزرنیم:</label>
+    <input type="text" id="username" value="xabag64158@skateru.com" placeholder="username">
+
+    <label for="password">پسورد:</label>
+    <div class="password-wrap">
+      <input type="password" id="password" value="amir0012A_" placeholder="password">
+      <span class="show-pass" onclick="togglePassword()">نمایش</span>
+    </div>
+
+    <button onclick="generateConfig()">ایجاد</button>
+    <button onclick="downloadConfig()">دانلود کانفیگ</button>
+    <div id="message"></div>
+  </div>
+
+  <div id="qrcode-wrapper">
+    <div id="qrcode"></div>
+    <button onclick="downloadQR()">دانلود QR Code</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    let generatedConfig = "";
+    const siteUrl = window.location.href;
+
+    function generateConfig() {
+      const server = document.getElementById("server").value;
+      const country = document.getElementById("server").options[document.getElementById("server").selectedIndex].text;
+      const verb = document.getElementById("verb").value;
+      const dns1 = document.getElementById("dns1").value;
+      const dns2 = document.getElementById("dns2").value;
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      generatedConfig = `
+client
+remote ${server} 443
+dev tun0
+proto udp
+nobind
+remote-cert-tls server
+persist-key
+persist-tun
+reneg-sec 0
+dhcp-option DNS ${dns1}
+dhcp-option DNS ${dns2}
+redirect-gateway
+verb ${verb}
+auth-user-pass
+<auth-user-pass>
+${username}
+${password}
+</auth-user-pass>
+data-ciphers AES-256-CBC
+auth SHA256
+<ca>
+-----BEGIN CERTIFICATE-----
+MIICPTCCAcOgAwIBAgIQfs/kxYEHK0ojKgXA1FrgFjAKBggqhkjOPQQDAjBgMQsw
+CQYDVQQGEwJDQTEUMBIGA1UECgwLTWNBZmVlLCBMTEMxDDAKBgNVBAsMA1ZQTjEt
+MCsGA1UEAwwkTWNBZmVlIE9wZW5WUE4gQ2VydGlmaWNhdGUgQXV0aG9yaXR5MB4X
+DTI0MDgwNjIwMzM0N1oXDTM0MDgwNjIxMzI0N1owYDELMAkGA1UEBhMCQ0ExFDAS
+BgNVBAoMC01jQWZlZSwgTExDMQwwCgYDVQQLDANWUE4xLTArBgNVBAMMJE1jQWZl
+ZSBPcGVuVlBOIENlcnRpZmljYXRlIEF1dGhvcml0eTB2MBAGByqGSM49AgEGBSuB
+BAAiA2IABNJps+fTiqQfpGzgpq9yAPM0rLzVZ1qscVxqag3ESsclEp/uk+HCAwK1
+EiLER8xXXweW9jVcYEHLuUkmBL+0FjocD5lI6zbrwaY8gWOz8vAP0fjolhXQgHfH
+TqrYC9unIqNCMEAwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUwa+4wbD5vocC
+xKeVNouzvsSPLekwDgYDVR0PAQH/BAQDAgGGMAoGCCqGSM49BAMCA2gAMGUCMGIM
+dRbutNNzP8GIyGHKtPd+7CSOlpqeBOUBsGLkj4F1y7/yqv7hIchtTIZQymmthAIx
+APY7ZiCKYW7L0mLVgowDRSY95Qxrs9NjsyQxlqRdMKcQfrojIH8Dh931M5Sj7EqR
+eg==
+-----END CERTIFICATE-----
+</ca>`;
+
+      document.getElementById("message").innerText = "ایجاد شد: " + country;
+    }
+
+    function downloadConfig() {
+      if (!generatedConfig) {
+        alert("اول روی ایجاد بزنید");
+        return;
+      }
+      const serverName = document.getElementById("server").options[document.getElementById("server").selectedIndex].text;
+      const fileName = serverName.replace(/\s+/g, '') + ".ovpn";
+      const blob = new Blob([generatedConfig], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      link.click();
+    }
+
+    const qrcode = new QRCode(document.getElementById("qrcode"), {
+      text: siteUrl,
+      width: 180,
+      height: 180
+    });
+
+    function togglePassword() {
+      const passInput = document.getElementById("password");
+      const toggle = document.querySelector(".show-pass");
+      const isHidden = passInput.type === "password";
+      passInput.type = isHidden ? "text" : "password";
+      toggle.textContent = isHidden ? "مخفی" : "نمایش";
+    }
+
+    function downloadQR() {
+      const img = document.querySelector("#qrcode img");
+      if (!img) return;
+      const link = document.createElement("a");
+      link.href = img.src;
+      link.download = "site-qrcode.png";
+      link.click();
+    }
+  </script>
+</body>
+</html>
