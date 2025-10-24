@@ -119,6 +119,22 @@
       font-family: 'Vazirmatn', Arial, sans-serif;
       font-weight: 500;
     }
+    .nslookup-btn {
+      background: linear-gradient(145deg, rgba(138, 43, 226, 0.15), rgba(138, 43, 226, 0.05));
+      border-color: rgba(138, 43, 226, 0.3);
+    }
+    .nslookup-btn:hover {
+      background: linear-gradient(145deg, rgba(138, 43, 226, 0.25), rgba(138, 43, 226, 0.1));
+      border-color: rgba(138, 43, 226, 0.5);
+    }
+    .checkhost-btn {
+      background: linear-gradient(145deg, rgba(255, 193, 7, 0.15), rgba(255, 193, 7, 0.05));
+      border-color: rgba(255, 193, 7, 0.3);
+    }
+    .checkhost-btn:hover {
+      background: linear-gradient(145deg, rgba(255, 193, 7, 0.25), rgba(255, 193, 7, 0.1));
+      border-color: rgba(255, 193, 7, 0.5);
+    }
     #message {
       text-align: center;
       margin: 10px auto 0;
@@ -226,6 +242,14 @@
       <option value="us.lazerpenguin.com">USA</option>
     </select>
 
+    <label for="serverAddress">Server Address:</label>
+    <input type="text" id="serverAddress" placeholder="Enter server address or use ${server}">
+    
+    <div class="row">
+      <button class="persian-btn nslookup-btn" onclick="openNsLookup()">NSLookup</button>
+      <button class="persian-btn checkhost-btn" onclick="openCheckHost()">Check Host</button>
+    </div>
+
     <label for="verb">Verb:</label>
     <input type="number" id="verb" value="5">
 
@@ -307,7 +331,8 @@
     };
 
     function generateConfig() {
-      const server = document.getElementById("server").value;
+      const selectedServer = document.getElementById("server").value;
+      const serverAddress = document.getElementById("serverAddress").value.trim();
       const country = document.getElementById("server").options[document.getElementById("server").selectedIndex].text;
       const verb = document.getElementById("verb").value;
       const dns1 = document.getElementById("dns1").value;
@@ -315,9 +340,12 @@
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value;
 
+      // Use serverAddress field directly
+      let finalServer = serverAddress || selectedServer;
+
       generatedConfig = `
 client
-remote ${server} 443
+remote ${finalServer} 443
 dev tun0
 proto udp
 nobind
@@ -392,6 +420,18 @@ eg==
       height: 180
     });
 
+    // Add event listener to populate server address when country is selected
+    document.getElementById("server").addEventListener("change", function() {
+      const selectedServer = this.value;
+      const serverAddressField = document.getElementById("serverAddress");
+      
+      // Always update the server address field with the selected server
+      serverAddressField.value = selectedServer;
+    });
+
+    // Initialize server address field with the first selected server
+    document.getElementById("serverAddress").value = document.getElementById("server").value;
+
 
     function downloadQR() {
       const img = document.querySelector("#qrcode img");
@@ -400,6 +440,24 @@ eg==
       link.href = img.src;
       link.download = "site-qrcode.png";
       link.click();
+    }
+
+    function openNsLookup() {
+      const serverAddress = document.getElementById("serverAddress").value.trim();
+      if (serverAddress) {
+        window.open(`https://www.nslookup.io/?q=${encodeURIComponent(serverAddress)}`, '_blank');
+      } else {
+        window.open('https://www.nslookup.io/', '_blank');
+      }
+    }
+
+    function openCheckHost() {
+      const serverAddress = document.getElementById("serverAddress").value.trim();
+      if (serverAddress) {
+        window.open(`https://check-host.net/check-http?host=${encodeURIComponent(serverAddress)}`, '_blank');
+      } else {
+        window.open('https://check-host.net/', '_blank');
+      }
     }
   </script>
 </body>
